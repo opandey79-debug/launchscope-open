@@ -1,0 +1,18 @@
+# For local/docker deployment. The build context requires a local clone.
+# Hostinger partner one-click deployment uses the public GitHub repository URL.
+services:
+  launchscope:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
