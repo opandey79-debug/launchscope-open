@@ -30,6 +30,14 @@ Try the API:
 curl -X POST http://localhost:3000/api/audit -H 'content-type: application/json' -d '{"url":"https://example.com"}'
 ```
 
+## Free demo deployment (no Hostinger upgrade required)
+
+[**Deploy a free demo on Render**](https://render.com/deploy?repo=https://github.com/opandey79-debug/launchscope-open)
+
+The included [`render.yaml`](render.yaml) specifies a Node.js free web service, `npm install`, `npm start` and a health check. After signing in to Render and approving the Blueprint, it will create a public `.onrender.com` URL if deployment succeeds. No custom domain is required.
+
+**Limitations:** Render free web services spin down after 15 minutes without traffic and may take around one minute to wake up. This is for testing/hobby/demo use, not production-grade availability. No sales commission is associated with a Render demo; Hostinger partner commission is separate and requires Hostinger approval and an issued referral link.
+
 ## Hostinger deployment
 
 1. Open your Hostinger hPanel and choose **Websites → Create site → Web App → Import Git Repository** (the exact path depends on your plan and hPanel).
