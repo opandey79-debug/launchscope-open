@@ -163,8 +163,13 @@ function rateLimit(req) {
   return curr.count>12;
 }
 async function handler(req,res) {
-  if(req.method==='GET'&&req.url==='/health') return respond(res,200,{status:'ok'});
-  if(req.method==='POST'&&req.url==='/api/audit') {
+  // Ignore query parameters when matching application routes and static assets.
+  // For example, /?utm_source=chat is still the home page.
+  let pathname;
+  try { pathname = new URL(req.url || '/', 'http://localhost').pathname; }
+  catch { return respond(res,400,{error:'Invalid request URL'}); }
+  if(req.method==='GET'&&pathname==='/health') return respond(res,200,{status:'ok'});
+  if(req.method==='POST'&&pathname==='/api/audit') {
     if(rateLimit(req)) return respond(res,429,{error:'Rate limit: try again in a minute.'});
     if(activeAudits>=5) return respond(res,503,{error:'The auditor is busy; please try again.'});
     let body='';
@@ -176,10 +181,10 @@ async function handler(req,res) {
     } catch(error) {return respond(res,400,{error:error.message||'Unable to audit website.'});}
   }
   const files={'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/favicon.svg':'favicon.svg'};
-  if(req.method==='GET' && files[req.url]) {
+  if(req.method==='GET' && files[pathname]) {
     try {
-      const file = await readFile(join(ROOT, 'public', files[req.url]));
-      const contentType = ({'/styles.css':'text/css; charset=utf-8','/app.js':'application/javascript; charset=utf-8','/favicon.svg':'image/svg+xml'})[req.url] || 'text/html; charset=utf-8';
+      const file = await readFile(join(ROOT, 'public', files[pathname]));
+      const contentType = ({'/styles.css':'text/css; charset=utf-8','/app.js':'application/javascript; charset=utf-8','/favicon.svg':'image/svg+xml'})[pathname] || 'text/html; charset=utf-8';
       return respond(res, 200, file, contentType);
     } catch { return respond(res,500,'Server error.','text/plain'); }
   }
