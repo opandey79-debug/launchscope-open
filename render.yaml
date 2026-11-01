@@ -1,0 +1,14 @@
+# Optional free demo deployment on Render.
+# This does not enroll the owner in Hostinger's partner program.
+services:
+  - type: web
+    name: launchscope-open
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_ENV
+        value: production
