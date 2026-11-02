@@ -11,6 +11,8 @@ if(partnerDeployUrl){byId('deploy-link').href=partnerDeployUrl;byId('deploy-link
 const phrases={reach:'Website status',https:'HTTPS',title:'SEO title',titleLength:'Title length',description:'Meta description',descriptionLength:'Description length',h1:'H1 structure',viewport:'Mobile viewport',robots:'robots.txt',sitemap:'XML sitemap',headers:'Security headers',favicon:'Favicon'};
 function render(report){
  latest=report;byId('report').hidden=false;
+ byId('preview-state').textContent='LIVE AUDIT';
+ document.querySelector('.preview').setAttribute('aria-label','Latest website audit results');
  const score=report.score;
  byId('score-value').textContent=score;
  byId('score-ring').style.background=`conic-gradient(${score>=60?'#bcfb80':'#ffbb75'} 0 ${score}%, #3b4453 ${score}% 100%)`;
