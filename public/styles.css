@@ -26,3 +26,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .feedback-strip a:hover{filter:brightness(.92)}
 @media(max-width:550px){.feedback-strip{align-items:stretch;flex-direction:column;padding:18px}.feedback-strip a{text-align:center;min-height:44px}}
 @media print{.feedback-strip{display:none!important}}
+
+/* Share the app — growth CTA */
+.share-row{display:flex;align-items:center;flex-wrap:wrap;gap:13px;margin-top:25px}
+.share-app{border:1px solid #b4fa75;background:#b4fa75;color:#19251c;font-size:12px;font-weight:800;border-radius:9px;padding:11px 16px;min-height:44px}
+.share-app:hover{background:#d1ffab}
+.share-github{border:1px solid #40505a;color:#c6d4dc;background:#1b2734;font-size:12px;font-weight:700;border-radius:9px;padding:11px 14px;min-height:44px;display:inline-flex;align-items:center}
+.share-github:hover{border-color:#b4fa75;color:#b4fa75}
+.share-status{min-height:16px;font-size:12px;color:#b4fa75;margin:8px 0 0}
+@media(max-width:550px){.share-row{gap:8px}.share-app,.share-github{font-size:11px;flex:1;justify-content:center;padding:10px 8px;text-align:center}}
+@media print{.share-row,.share-status{display:none!important}}
