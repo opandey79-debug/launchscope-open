@@ -19,6 +19,32 @@
 
 **Boundaries:** This isn't a performance benchmark, accessibility audit, penetration test, deep SEO review, or a guarantee of rankings or security. The free Render demo might sleep while inactive.
 
+## Product Hunt submission — ready-to-paste fields (updated Nov 2, 2026)
+
+**Product name:** LaunchScope Open
+
+**Product URL:** https://launchscope-open.onrender.com/
+
+**Tagline (50 characters; maximum 60):** Free, open-source website launch readiness checker
+
+**Short description (within 260 characters):**
+
+LaunchScope Open is a free, MIT-licensed website launch checker. Enter a URL to review 12 essentials: HTTPS, titles, descriptions, mobile viewport, sitemaps and security headers. Get a score, practical recommendations, and CSV/JSON reports. No signup.
+
+**Pricing:** Free
+
+**Topics (up to 3):** Developer Tools · Open Source · Productivity (select only those offered in the current form)
+
+**Thumbnail:** 240×240 square illustration prepared in the downloadable Product Hunt visual kit.
+
+**Gallery:** Three 1270×760 illustrative visuals prepared; they are compositions based on the product's UI, not direct recordings of the current production server. The example.com audit shown uses the earlier observed 50/100 score. Review graphics before upload.
+
+**Demo video:** A 41-second narrated-free animated walkthrough has been created in 16:9 and 9:16, but its previous ChatGPT download links may fail on some mobile clients. Do not claim there is a permanently hosted video URL.
+
+**Maker comment:** Use the founder comment draft below. Do not claim 25 real testers, awards, earned commissions, or a comprehensive SEO/security certification.
+
+**Submission status:** Draft materials only; not posted to Product Hunt. A signed-in Product Hunt personal account is required for actual submission. Do not schedule or launch until the final account/page can be verified.
+
 ## Product Hunt launch draft
 
 **Tagline:** Free, open-source website launch readiness checker
