@@ -17,3 +17,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:0s!important;animation-duration:0s!important}}
 @media print{.sample-row,.report-action-status{display:none!important}}
+
+/* Early feedback CTA: small, unobtrusive and responsive. */
+.feedback-strip{margin-top:26px;padding:20px 22px;display:flex;gap:20px;align-items:center;justify-content:space-between;background:#1b2933;border:1px solid #3d5347;border-radius:12px}
+.feedback-strip strong{font-family:'Space Grotesk',sans-serif;font-size:16px;color:#edf8ea}
+.feedback-strip p{color:#b5c3c3;font-size:12px;line-height:1.6;margin:7px 0 0}
+.feedback-strip a{flex:none;padding:12px 14px;border-radius:8px;background:var(--accent);font-size:12px;font-weight:800;color:#1b281d}
+.feedback-strip a:hover{filter:brightness(.92)}
+@media(max-width:550px){.feedback-strip{align-items:stretch;flex-direction:column;padding:18px}.feedback-strip a{text-align:center;min-height:44px}}
+@media print{.feedback-strip{display:none!important}}
