@@ -1,6 +1,6 @@
 {
   "name": "launchscope-open",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": false,
   "description": "An open-source, self-hostable website launch-readiness auditor",
   "main": "server.js",
