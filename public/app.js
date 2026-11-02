@@ -2,6 +2,27 @@ const byId=id=>document.getElementById(id);
 const form=byId('scan-form'),field=byId('website'),button=byId('run'),status=byId('status');
 let latest=null;
 byId('year').textContent=String(new Date().getFullYear());
+byId('share-app').addEventListener('click',async()=>{
+ const url='https://launchscope-open.onrender.com/';
+ const title='LaunchScope Open — free website launch checker';
+ const message='Check 12 website launch essentials for free — no signup required.';
+ const status=byId('share-status');
+ try{
+  if(typeof navigator.share==='function'){
+   await navigator.share({title,text:message,url});
+   status.textContent='Shared successfully.';
+  }else if(navigator.clipboard && typeof navigator.clipboard.writeText==='function'){
+   await navigator.clipboard.writeText(url);
+   status.textContent='✓ LaunchScope link copied. Share it with a friend.';
+  }else{
+   const tmp=document.createElement('textarea');tmp.value=url;tmp.style.position='fixed';tmp.style.opacity='0';
+   document.body.append(tmp);tmp.select();
+   const copied=document.execCommand('copy');tmp.remove();
+   if(!copied)throw new Error('Copy not available');
+   status.textContent='✓ LaunchScope link copied. Share it with a friend.';
+  }
+ }catch(e){status.textContent=e?.name==='AbortError'?'Share cancelled.':'Unable to share automatically. Copy the website URL from your browser.';}
+});
 // Maintainers: set these on your own GitHub repository after getting approved by Hostinger.
 // This placeholder deliberately does NOT attribute clicks or commissions to anyone.
 const repo='https://github.com/opandey79-debug/launchscope-open';
