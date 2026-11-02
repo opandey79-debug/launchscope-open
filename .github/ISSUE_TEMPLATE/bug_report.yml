@@ -1,0 +1,49 @@
+name: "Bug report"
+description: "Report a problem in the public LaunchScope website checker."
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue. Please do not paste private user data or credential material.
+        If this is a security vulnerability, follow SECURITY.md rather than filing public exploit details.
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: Explain what went wrong and what you expected instead.
+      placeholder: "The CSV button..."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Visit the LaunchScope demo
+        2. Enter a public test site
+        3. Click Run free audit
+        4. Observe...
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Android phone
+        - iPhone / iPad
+        - Desktop / laptop
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version (optional)
+  - type: textarea
+    id: logs
+    attributes:
+      label: Public error messages (optional)
+      description: Remove private website details or credentials before submitting.
