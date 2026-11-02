@@ -4,12 +4,18 @@
 
 **GitHub repository:** https://github.com/opandey79-debug/launchscope-open
 
+**[▶ Try the live demo](https://launchscope-open.onrender.com/)** · **[🚀 Deploy your own free demo on Render](https://render.com/deploy?repo=https://github.com/opandey79-debug/launchscope-open)**
+
+To try it: open the live app, enter a public website you own or are authorized to assess (or choose **Try example.com**), press **Run free audit**, then review your score and 12 findings. Export as **CSV / JSON / Print-PDF**, or **Copy summary** to share a quick text report. A link with `?site=https%3A%2F%2Fexample.com` prefills the domain without automatically scanning it.
+
+
 ## Features
 
 - 12 website launch checks with weighted 0–100 score and clear recommendations
 - Responsive, mobile-friendly audit dashboard
 - Reviews HTTPS, SEO, robots.txt, sitemap.xml, security headers and favicon
-- Exports the report to JSON and offers browser Print/PDF
+- Exports CSV / JSON, offers browser Print/PDF and copyable text summaries for a developer or client
+- Example scan shortcut, query parameter URL prefill and social link-preview metadata
 - Self-hostable using Node.js 20+ or Docker
 - No paid API, database, sign-up or tracking dependencies
 - JSON API: `POST /api/audit`
