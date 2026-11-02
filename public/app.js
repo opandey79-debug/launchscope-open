@@ -49,13 +49,78 @@ form.addEventListener('submit',async e=>{
  try{
   const response=await fetch('/api/audit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({url})});
   const data=await response.json();if(!response.ok)throw new Error(data.error||'The check failed.');
-  render(data);status.textContent='✓ Scan completed. You can export or print the full report.';
+  render(data);byId('report-action-status').textContent='';status.textContent='✓ Scan completed. Export as CSV or JSON, copy the summary, or save as PDF.';
  }catch(err){status.textContent='⚠ '+err.message;status.classList.add('error');}
  finally{button.disabled=false;button.innerHTML='Run free audit <span aria-hidden="true">↗</span>';}
 });
 byId('save-json').addEventListener('click',()=>{
  if(!latest)return;
- const blob=new Blob([JSON.stringify(latest,null,2)],{type:'application/json'});
- const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`launchscope-${new URL(latest.url).hostname}-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);
+ download(JSON.stringify(latest,null,2),'application/json','.json');
+ showActionStatus('✓ JSON report downloaded.');
 });
+
+function safeCSVCell(value) {
+ // Guard spreadsheet users against formula injection from audited site metadata.
+ let cell=String(value??'').replace(/[\u0000-\u001f\u007f]/g,' ').trim();
+ if(/^[=+@\-]/.test(cell)) cell="'"+cell;
+ return '"'+cell.replace(/"/g,'""')+'"';
+}
+function makeCSV(report) {
+ const rows=[['Website',report.url],['Score',String(report.score)+'/100'],['Grade',report.grade],
+   ['Checked at',report.checkedAt],[],['Category','Check','Status','Points earned','Available points','Details','Recommendation']];
+ report.items.forEach(item=>rows.push([item.group,item.name,item.passed?'Passed':'Needs review',
+   item.passed?item.points:0,item.points,item.detail,item.passed?'':item.tip]));
+ return '\uFEFF'+rows.map(row=>row.map(safeCSVCell).join(',')).join('\r\n');
+}
+function download(text,mime,suffix) {
+ if(!latest)return;
+ const blob=new Blob([text],{type:mime});
+ const u=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=u;a.download='launchscope-'+new URL(latest.url).hostname+'-'+new Date().toISOString().slice(0,10)+suffix;
+ document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function showActionStatus(message) { byId('report-action-status').textContent=message; }
+byId('save-csv').addEventListener('click',()=>{
+ if(!latest)return;
+ download(makeCSV(latest),'text/csv;charset=utf-8','.csv');
+ showActionStatus('✓ CSV report downloaded.');
+});
+byId('copy-summary').addEventListener('click',async()=>{
+ if(!latest)return;
+ const passed=latest.items.filter(item=>item.passed).length;
+ const site=latest.url;
+ const shareURL=new URL(window.location.origin+'/');
+ shareURL.searchParams.set('site',site);
+ const summary=[
+   'LaunchScope Open — Website Launch Check',
+   'Website: '+site,
+   'Score: '+latest.score+'/100 ('+latest.grade+')',
+   'Checks: '+passed+'/'+latest.items.length+' passed',
+   '',
+   ...latest.items.map(item=>(item.passed?'✓ ':'! ')+item.name+': '+(item.passed?'Passed':'Review')),
+   '',
+   'Run your own audit: '+shareURL,
+   'Note: A basic technical checklist, not a comprehensive security or SEO audit.'
+ ].join('\n');
+ try {
+  if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(summary);
+  else {
+   const t=document.createElement('textarea');t.value=summary;t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.select();
+   if(!document.execCommand('copy'))throw new Error('Copy unavailable');
+   t.remove();
+  }
+  showActionStatus('✓ Summary copied. Share it with your developer or team.');
+ } catch { showActionStatus('Copy was blocked by your browser. Use CSV or Print / PDF instead.'); }
+});
+byId('try-example').addEventListener('click',()=>{
+ field.value='https://example.com';
+ field.focus();
+ status.textContent='Example added. Press Run free audit to view a real report.';
+});
+try {
+ const suggested=new URL(window.location.href).searchParams.get('site');
+ if(suggested && suggested.length<=2048 && /^https?:\/\//i.test(suggested)) field.value=suggested;
+} catch { /* ignore invalid URL parameters */ }
+
 byId('print-report').addEventListener('click',()=>{if(latest)window.print();});
