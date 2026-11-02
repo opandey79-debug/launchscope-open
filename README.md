@@ -22,6 +22,18 @@ To try it: open the live app, enter a public website you own or are authorized t
 
 This is a **basic technical checklist**, not a full penetration test, accessibility, performance or SEO assessment. No scanning result guarantees rankings, indexing or security.
 
+## Help us improve: early testers welcome
+
+**A 3-minute feedback test:** [Run the live demo](https://launchscope-open.onrender.com/), try `example.com` or a site you are authorized to assess, read the 12 findings, and check CSV / Copy summary.
+
+- **[Tell us what worked or didn't (early tester thread)](https://github.com/opandey79-debug/launchscope-open/issues/1)**
+- **[Structured feedback or bug report](https://github.com/opandey79-debug/launchscope-open/issues/new/choose)**
+- **[Contribute code or translations](CONTRIBUTING.md)**
+
+Please don't share secrets, customer data, or private URLs. You need a GitHub account to submit an Issue. **We don't publish invented user counts or testimonials.**
+
+
+
 ## Run locally
 
 ```bash
