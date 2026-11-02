@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 — 2026-11-02
+
+- Add a simple **Share free tool** action using native mobile sharing with clipboard fallback.
+- Add a visible link from the home page to the source repository.
+- Publish a public launch kit and truthful developer / personal social post drafts.
+- Keep Hostinger partner referrals disabled until an approved personal link is issued.
+
 ## 1.1.0 — 2026-11-02
 
 This release focuses on making LaunchScope easier to try, read and share.
