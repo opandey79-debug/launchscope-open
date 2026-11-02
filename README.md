@@ -22,6 +22,12 @@ To try it: open the live app, enter a public website you own or are authorized t
 
 This is a **basic technical checklist**, not a full penetration test, accessibility, performance or SEO assessment. No scanning result guarantees rankings, indexing or security.
 
+## Share LaunchScope with other website builders
+
+The live app now includes a **Share free tool** action (native mobile sharing or a copy-link fallback), plus a direct link to its public GitHub source. The goal is to make it easy for early users to share a useful free resource. No hidden referral code or tracking is involved.
+
+**[Open the live app](https://launchscope-open.onrender.com/)** · **[Public launch kit and post drafts](docs/LAUNCH_KIT.md)**
+
 ## Help us improve: early testers welcome
 
 **A 3-minute feedback test:** [Run the live demo](https://launchscope-open.onrender.com/), try `example.com` or a site you are authorized to assess, read the 12 findings, and check CSV / Copy summary.
