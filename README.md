@@ -6,6 +6,8 @@
 
 **[▶ Try the live demo](https://launchscope-open.onrender.com/)** · **[🚀 Deploy your own free demo on Render](https://render.com/deploy?repo=https://github.com/opandey79-debug/launchscope-open)**
 
+**[🗓 Product Hunt — November 12 pre-launch checklist](docs/PRODUCT_HUNT_PRELAUNCH_RUNBOOK.md)** · Launch scheduled for **12:01 AM PST / 1:31 PM IST** according to the maker's Product Hunt confirmation. No Product Hunt live listing has been verified yet.
+
 To try it: open the live app, enter a public website you own or are authorized to assess (or choose **Try example.com**), press **Run free audit**, then review your score and 12 findings. Export as **CSV / JSON / Print-PDF**, or **Copy summary** to share a quick text report. A link with `?site=https%3A%2F%2Fexample.com` prefills the domain without automatically scanning it.
 
 
