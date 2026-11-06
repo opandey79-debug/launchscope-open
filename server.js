@@ -97,7 +97,16 @@ function fetchSafe(url, method='GET', redirectCount=0, maxBody=MAX_BODY) {
 }
 
 function decodeEntities(s='') {
-  return s.replace(/&(?:amp|lt|gt|quot|apos|#39|nbsp);/gi, m => ({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&nbsp;':' '}[m.toLowerCase()]||m)).replace(/\s+/g,' ').trim();
+  return s.replace(/&(?:amp|lt|gt|quot|apos|nbsp|#\d+|#x[\da-f]+);/gi, entity => {
+    if (entity[1] !== '#') {
+      return {'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&nbsp;':' '}[entity.toLowerCase()] || entity;
+    }
+    const hex = entity[2].toLowerCase() === 'x';
+    const point = parseInt(entity.slice(hex ? 3 : 2, -1), hex ? 16 : 10);
+    // Invalid Unicode references must not crash an otherwise valid audit.
+    if (point === 0 || point > 0x10ffff || point >= 0xd800 && point <= 0xdfff) return '\ufffd';
+    return String.fromCodePoint(point);
+  }).replace(/\s+/g,' ').trim();
 }
 function getTag(html, pattern) { return decodeEntities(html.match(pattern)?.[1] || ''); }
 function attributes(tag) {
