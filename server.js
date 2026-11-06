@@ -5,6 +5,7 @@ import net from 'node:net';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import { makeReportPDF } from './report-pdf.js';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3000);
@@ -12,6 +13,9 @@ const MAX_BODY = 550_000;
 const MAX_REQUEST_BODY = 2_048;
 const limits = new Map();
 let activeAudits = 0;
+let activePDFs = 0;
+const PUBLIC_URL = new URL(process.env.PUBLIC_URL || 'https://launchscope-open.onrender.com/');
+const escapeXML = value => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 
 function publicIP(ip) {
   if (!ip || net.isIP(ip) === 0) return false;
@@ -161,7 +165,7 @@ async function audit(input) {
 }
 
 function respond(res, status, body, type='application/json; charset=utf-8') {
-  res.writeHead(status,{'content-type':type,'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer','content-security-policy':"default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"});
+  res.writeHead(status,{'content-type':type,'cache-control':'no-store','x-content-type-options':'nosniff','strict-transport-security':'max-age=31536000','referrer-policy':'no-referrer','content-security-policy':"default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"});
   res.end(typeof body==='string'||Buffer.isBuffer(body)?body:JSON.stringify(body));
 }
 function rateLimit(req) {
@@ -178,6 +182,25 @@ async function handler(req,res) {
   try { pathname = new URL(req.url || '/', 'http://localhost').pathname; }
   catch { return respond(res,400,{error:'Invalid request URL'}); }
   if(req.method==='GET'&&pathname==='/health') return respond(res,200,{status:'ok'});
+  if(req.method==='GET'&&pathname==='/robots.txt') return respond(res,200,
+    `User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: ${new URL('/sitemap.xml', PUBLIC_URL)}\n`, 'text/plain; charset=utf-8');
+  if(req.method==='GET'&&pathname==='/sitemap.xml') return respond(res,200,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeXML(new URL('/', PUBLIC_URL).href)}</loc></url></urlset>\n`, 'application/xml; charset=utf-8');
+  if(req.method==='POST'&&pathname==='/api/report/pdf') {
+    if(rateLimit(req)) return respond(res,429,{error:'Rate limit: try again in a minute.'});
+    if(activePDFs>=2) return respond(res,503,{error:'PDF export is busy; please try again.'});
+    let body='';
+    try {
+      for await (const chunk of req) {body+=chunk.toString(); if(Buffer.byteLength(body)>32768) throw new Error('Report is too large.');}
+      const report=JSON.parse(body);
+      activePDFs++;
+      try {
+        const pdf=await makeReportPDF(report);
+        res.setHeader('Content-Disposition','attachment; filename="launchscope-report.pdf"');
+        return respond(res,200,pdf,'application/pdf');
+      } finally {activePDFs--;}
+    } catch(error) {return respond(res,400,{error:error.message||'Unable to create PDF.'});}
+  }
   if(req.method==='POST'&&pathname==='/api/audit') {
     if(rateLimit(req)) return respond(res,429,{error:'Rate limit: try again in a minute.'});
     if(activeAudits>=5) return respond(res,503,{error:'The auditor is busy; please try again.'});

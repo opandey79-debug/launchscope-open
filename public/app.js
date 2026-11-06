@@ -146,4 +146,18 @@ try {
  if(suggested && suggested.length<=2048 && /^https?:\/\//i.test(suggested)) field.value=suggested;
 } catch { /* ignore invalid URL parameters */ }
 
-byId('print-report').addEventListener('click',()=>{if(latest)window.print();});
+byId('print-report').addEventListener('click',async()=>{
+ if(!latest)return;
+ const control=byId('print-report');control.disabled=true;
+ showActionStatus('Preparing your PDF report…');
+ try {
+  const response=await fetch('/api/report/pdf',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(latest)});
+  if(!response.ok){const error=await response.json();throw new Error(error.error||'PDF export failed.');}
+  const blob=await response.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='launchscope-'+new URL(latest.url).hostname+'-'+new Date().toISOString().slice(0,10)+'.pdf';
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showActionStatus('✓ PDF report downloaded.');
+ } catch(error) {showActionStatus('PDF export: '+error.message+' Try Print, CSV or JSON.');}
+ finally {control.disabled=false;}
+});
+byId('print-browser').addEventListener('click',()=>{if(latest)window.print();});

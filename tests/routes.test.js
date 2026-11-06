@@ -35,3 +35,21 @@ test('unknown routes still return 404', async () => {
   const response = await runGet('/not-a-real-page?utm_source=chat');
   assert.equal(response.status, 404);
 });
+
+test('discovery files expose only the canonical homepage', async () => {
+ const robots=await runGet('/robots.txt?check=1');
+ assert.equal(robots.status,200);
+ assert.match(robots.headers['content-type'],/text\/plain/);
+ assert.match(robots.body,/Disallow: \/api\//);
+ assert.match(robots.body,/Sitemap: https:\/\/launchscope-open.onrender.com\/sitemap.xml/);
+ const sitemap=await runGet('/sitemap.xml');
+ assert.equal(sitemap.status,200);
+ assert.match(sitemap.headers['content-type'],/application\/xml/);
+ assert.match(sitemap.body,/<loc>https:\/\/launchscope-open.onrender.com\/<\/loc>/);
+ assert.doesNotMatch(sitemap.body,/api\//);
+});
+
+test('all routes include transport security policy',async()=>{
+ const response=await runGet('/');
+ assert.equal(response.headers['strict-transport-security'],'max-age=31536000');
+});
