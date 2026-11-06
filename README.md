@@ -8,7 +8,7 @@
 
 **[🗓 Product Hunt — November 12 pre-launch checklist](docs/PRODUCT_HUNT_PRELAUNCH_RUNBOOK.md)** · Launch scheduled for **12:01 AM PST / 1:31 PM IST** according to the maker's Product Hunt confirmation. No Product Hunt live listing has been verified yet.
 
-To try it: open the live app, enter a public website you own or are authorized to assess (or choose **Try example.com**), press **Run free audit**, then review your score and 12 findings. Export as **CSV / JSON / Print-PDF**, or **Copy summary** to share a quick text report. A link with `?site=https%3A%2F%2Fexample.com` prefills the domain without automatically scanning it.
+To try it: open the live app, enter a public website you own or are authorized to assess (or choose **Try example.com**), press **Run free audit**, then review your score and 12 findings. Export as **CSV / JSON / PDF**, or **Copy summary** to share a quick text report. A link with `?site=https%3A%2F%2Fexample.com` prefills the domain without automatically scanning it.
 
 
 ## Features
@@ -16,7 +16,7 @@ To try it: open the live app, enter a public website you own or are authorized t
 - 12 website launch checks with weighted 0–100 score and clear recommendations
 - Responsive, mobile-friendly audit dashboard
 - Reviews HTTPS, SEO, robots.txt, sitemap.xml, security headers and favicon
-- Exports CSV / JSON, offers browser Print/PDF and copyable text summaries for a developer or client
+- Exports CSV / JSON / directly downloadable PDF, offers browser printing and copyable text summaries for a developer or client
 - Example scan shortcut, query parameter URL prefill and social link-preview metadata
 - Self-hostable using Node.js 20+ or Docker
 - No paid API, database, sign-up or tracking dependencies
@@ -45,10 +45,15 @@ Please don't share secrets, customer data, or private URLs. You need a GitHub ac
 ## Run locally
 
 ```bash
+npm ci
 npm start
 # Visit http://localhost:3000
 npm test
 ```
+
+Set `PUBLIC_URL` to your canonical public URL when self-hosting so robots.txt and sitemap.xml use the correct origin. It defaults to the live demo URL.
+
+PDF exports render the current audit snapshot with embedded Latin and Devanagari fonts; they do not run another scan.
 
 Try the API:
 

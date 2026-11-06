@@ -18,3 +18,20 @@ test('weighted score stays bounded',()=>{
  const report=assess({status:200,url:'https://example.com',body:'<title>Example site with an excellent title</title><meta name="description" content="A sample website that describes its offers to visitors in more than fifty characters for easy discovery."><meta name="viewport" content="width=device-width"><h1>Hello</h1><link rel="icon" href="/favicon.ico">',headers:{'strict-transport-security':'max-age=10','content-security-policy':'default-src self','x-content-type-options':'nosniff'}},true,true);
  assert.equal(report.score,100);assert.equal(report.items.length,12);
 });
+
+test('decodes decimal and hexadecimal entities before SEO length checks',()=>{
+ const title='Tools &#038; Resources for Launch';
+ const description='Build &#x26; launch your website with clear reports and actionable recommendations.';
+ const body=`<title>${title}</title><meta name="description" content="${description}">`;
+ const e=extract(body);
+ assert.equal(e.title,'Tools & Resources for Launch');
+ assert.equal(e.description,'Build & launch your website with clear reports and actionable recommendations.');
+ const r=assess({status:200,url:'https://example.com',body,headers:{}},false,false);
+ assert.equal(r.items.find(i=>i.id==='titleLength').detail,`${e.title.length} characters`);
+ assert.equal(r.items.find(i=>i.id==='descriptionLength').detail,`${e.description.length} characters`);
+ assert.equal(extract('<title>&#x1f680; &#39; &#00038; &amp;#038;</title>').title,"🚀 ' & &#038;");
+});
+
+test('invalid Unicode references do not crash metadata extraction',()=>{
+ assert.equal(extract('<title>&#0; &#xD800; &#1114112;</title>').title,'\ufffd \ufffd \ufffd');
+});
