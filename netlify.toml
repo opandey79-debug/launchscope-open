@@ -1,0 +1,19 @@
+[build]
+  command = "node scripts/build-netlify.mjs"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["pdfkit", "@fontsource/noto-sans", "@fontsource/noto-sans-devanagari"]
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Strict-Transport-Security = "max-age=31536000"
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"

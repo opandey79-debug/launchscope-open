@@ -14,7 +14,7 @@ const MAX_REQUEST_BODY = 2_048;
 const limits = new Map();
 let activeAudits = 0;
 let activePDFs = 0;
-const PUBLIC_URL = new URL(process.env.PUBLIC_URL || 'https://launchscope-open.onrender.com/');
+const PUBLIC_URL = new URL(process.env.PUBLIC_URL || (process.env.NETLIFY && process.env.URL) || 'https://launchscope-open.onrender.com/');
 const escapeXML = value => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 
 function publicIP(ip) {

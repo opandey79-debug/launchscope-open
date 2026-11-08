@@ -69,6 +69,19 @@ The included [`render.yaml`](render.yaml) specifies a Node.js free web service, 
 
 **Limitations:** Render free web services spin down after 15 minutes without traffic and may take around one minute to wake up. This is for testing/hobby/demo use, not production-grade availability. No sales commission is associated with a Render demo; Hostinger partner commission is separate and requires Hostinger approval and an issued referral link.
 
+## Netlify Free deployment
+
+The included `netlify.toml` serves the frontend through Netlify's CDN and routes the audit, PDF, health and discovery endpoints to a Node.js function. The existing Node server, Docker and Render deployment continue to work.
+
+1. Import this public repository into a Netlify **Free** account. Do not select a paid trial or enable paid add-ons.
+2. Let Netlify use `netlify.toml` (build command `node scripts/build-netlify.mjs`, publish directory `dist`). Node.js 22 is selected for the build.
+3. Netlify's `URL` sets the canonical origin automatically. Set `PUBLIC_URL` only if you need to override it for a custom domain.
+4. Verify a live audit, the PDF/CSV/JSON downloads and `/robots.txt`/`/sitemap.xml` before switching any public launch links.
+
+As checked on November 8, 2026, Netlify Free includes 300 credits/month with a hard limit and no automatic recharge. Deploys, traffic and function compute consume credits; sites can pause at the limit. This is not unlimited hosting. See [current Netlify credit pricing](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/).
+
+Functions have a 60-second execution limit; very slow targets can time out. Static assets do not invoke the audit function. Netlify's function rate limit is 12 requests per IP per minute, in addition to the existing per-instance application limits. Serverless instances do not share in-memory counters. Review platform usage and rate limits as traffic grows.
+
 ## Hostinger deployment
 
 1. Open your Hostinger hPanel and choose **Websites → Create site → Web App → Import Git Repository** (the exact path depends on your plan and hPanel).
