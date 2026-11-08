@@ -3,7 +3,7 @@ const form=byId('scan-form'),field=byId('website'),button=byId('run'),status=byI
 let latest=null;
 byId('year').textContent=String(new Date().getFullYear());
 byId('share-app').addEventListener('click',async()=>{
- const url='https://launchscope-open.onrender.com/';
+ const url=new URL('/',window.location.href).href;
  const title='LaunchScope Open — free website launch checker';
  const message='Check 12 website launch essentials for free — no signup required.';
  const status=byId('share-status');
